@@ -73,21 +73,9 @@ Open `http://localhost:5000` — the frontend and API are served from the same o
 
 **Demo login:** `customer@demo.com` / `password123` (every seeded account uses this password — e.g. `marcus.odum@demo.com` for an artisan account).
 
-**⚠️ If you have an existing `database.sqlite` from before this update:** delete it before running `npm run seed` again. Both the `Artisan` table (`state`/`city` added, `trade` changed to free text) and the `User` table (email verification fields added) changed shape, and Sequelize's `sync()` doesn't alter existing tables — it'll error on old data. This only matters for local dev; a fresh Render deploy always starts clean.
 
 **Email notifications:** welcome emails (signup), new-booking emails (to the artisan), and booking-accepted emails (to the customer) all use the same SMTP setup as password reset — see the SMTP note above. With no SMTP configured, every send just logs to the terminal instead of failing, so all three flows are fully testable locally without a real mail provider.
 
-**Forgot password without setting up email:** leave `SMTP_HOST` blank in `.env` (the default). The reset link will be printed to your terminal running `npm run dev`, and also returned directly in the API response in non-production — copy either one into a browser to continue the flow. To send real emails, fill in `SMTP_HOST`/`SMTP_PORT`/`SMTP_USER`/`SMTP_PASS`/`EMAIL_FROM` in `.env` (any SMTP provider works — Gmail with an app password, Mailtrap, Resend, etc.).
-
----
-
-## Deploy to Render
-
-1. Push this repo to GitHub.
-2. In Render: **New → Blueprint**, point it at the repo. Render will read `render.yaml` and configure the service automatically (build runs `npm install && npm run seed`, so the deployed app has demo data immediately).
-3. Once deployed, Render gives you a public URL — that's your deployed link.
-
-**Note on SQLite + Render's free tier:** the filesystem is ephemeral, so data can reset on redeploys. That's fine for a demo (the seed step refills it automatically on every deploy), but for a real production deployment you'd want either a Render persistent disk (paid) or to switch the database to Postgres - the codebase only touches SQLite in `src/config/db.js`, so swapping the dialect there (and the connection string) is the only change needed since everything else goes through Sequelize.
 
 ---
 
@@ -112,21 +100,3 @@ Open `http://localhost:5000` — the frontend and API are served from the same o
 | POST | `/api/reviews` | any user | Review a completed booking |
 | GET | `/api/reviews/artisan/:id` | — | Public reviews for an artisan |
 
----
-
-## Recording the demo video (2–3 min)
-
-Suggested flow, since this maps directly to the brief:
-1. **Search** — show the Browse tab, filter by a trade, search a keyword.
-2. **Profiles** — click an artisan card, show the profile (note the phone number is hidden).
-3. **Booking** — sign up/log in as a customer, send a booking request, show the phone number unlock immediately after.
-4. Switch accounts (or use a second seeded artisan login) and show **My Bookings → Received**, accept the request.
-5. Mention the **deploy** — show the live Render URL loading the same app.
-
----
-
-## What's not included (flagged, not hidden)
-
-- File uploads for profile photos
-- Real-time notifications (would add Socket.io)
-- Automated tests (Jest/Supertest) — the flows above were verified manually end-to-end during development

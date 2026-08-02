@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stampworks — Find Local Trade</title>
+<link rel="icon" href="./image/faveicon.png" type="image/x-icon">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Work+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 48 48">
+        <circle cx="24" cy="24" r="22" fill="none" stroke="#C17A3D" stroke-width="2"/>
+        <circle cx="24" cy="24" r="16" fill="none" stroke="#5C8A7A" stroke-width="1" stroke-dasharray="2 3"/>
+        <text x="24" y="30" text-anchor="middle" font-family="Oswald" font-weight="700" font-size="18" fill="#ECE7DB">S</text>
+      </svg>
+      <div>
+        <h1>Stampworks</h1>
+        <div class="tagline">Verified local trade, by the neighborhood</div>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <nav id="mainNav">
+        <button class="active" data-tab="browse">Browse</button>
+        <button data-tab="list">List Your Trade</button>
+        <button data-tab="bookings">My Bookings</button>
+      </nav>
+      <div id="authArea"></div>
+    </div>
+  </header>
+
+  <div id="app"><div class="loading">Loading the ledger…</div></div>
+</div>
+
+<div id="modalRoot"></div>
+<div id="noticeRoot"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
