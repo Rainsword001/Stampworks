@@ -66,10 +66,10 @@ cd backend
 npm install
 cp .env.example .env        # defaults work out of the box for local dev
 npm run seed                # creates database.sqlite + 8 demo artisans + 1 demo customer
-npm run dev                 # http://localhost:5000
+npm run dev                
 ```
 
-Open `http://localhost:5000` — the frontend and API are served from the same origin.
+
 
 **Demo login:** `customer@demo.com` / `password123` (every seeded account uses this password — e.g. `marcus.odum@demo.com` for an artisan account).
 
