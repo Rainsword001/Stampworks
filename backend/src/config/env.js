@@ -4,6 +4,8 @@ config({
   path: `.env.${process.env.NODE_ENV || 'development'}`,
 });
 
+
+// Load environment variables from .env file
 const env = {
   PORT: process.env.PORT,
   DB_STORAGE: process.env.DB_STORAGE,
