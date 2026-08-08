@@ -1,4 +1,4 @@
-const { isConfigured, getTransporter, getDefaultFrom } = require('../config/mail.config');
+const { isConfigured, sendMail: sendViaBrevo } = require('../config/mail.config');
 const otpTemplate = require('../templates/otp.template');
 const welcomeTemplate = require('../templates/welcome.template');
 const passwordResetTemplate = require('../templates/password-reset.template');
@@ -10,24 +10,32 @@ const bookingAcceptedTemplate = require('../templates/booking-accepted.template'
 // Never throws — a broken/unconfigured mail provider should never take
 // down signup, booking, or password-reset flows that only need the
 // *side effect* of an email; callers get {sent: false, reason} instead.
+
+function getAppUrl() {
+  return process.env.CLIENT_ORIGIN && process.env.CLIENT_ORIGIN !== '*' ? process.env.CLIENT_ORIGIN : undefined;
+}
+
+
+
 async function send({ to, subject, text = '', html = '' }) {
   if (!to) throw new Error('Recipient email is required.');
   if (!subject) throw new Error('Email subject is required.');
 
   if (!isConfigured()) {
-    console.warn('\n[Mail] SMTP not configured — email not sent (dev only):');
+    console.warn('\n[Mail] Brevo not configured — email not sent (dev only):');
     console.log({ to, subject, text });
-    return { sent: false, reason: 'smtp_not_configured' };
+    return { sent: false, reason: 'not_configured' };
   }
 
-  try {
-    const info = await getTransporter().sendMail({ from: getDefaultFrom(), to, subject, text, html });
+  const result = await sendViaBrevo({ to, subject, text, html });
+
+  if (result.ok) {
     console.log(`[Mail] Sent to ${to}: "${subject}"`);
-    return { sent: true, messageId: info.messageId };
-  } catch (error) {
-    console.error(`[Mail] Failed to send to ${to}:`, error.message);
-    return { sent: false, reason: 'send_failed', error: error.message };
+    return { sent: true, messageId: result.messageId };
   }
+
+  console.error(`[Mail] Failed to send to ${to}:`, result.reason);
+  return { sent: false, reason: 'send_failed', error: result.reason };
 }
 
 async function sendOtpEmail(email, name, otp) {

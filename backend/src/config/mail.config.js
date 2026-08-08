@@ -1,57 +1,71 @@
+const axios = require('axios');
+const { BREVO_API_KEY, EMAIL_FROM, EMAIL_FROM_NAME } = require('../config/env.js');
 
-const nodemailer = require('nodemailer');
-const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, EMAIL_FROM } = require('../config/env.js');
+const BREVO_API_URL = 'https://api.brevo.com/v3/smtp/email';
 
 function isConfigured() {
-  return Boolean(SMTP_HOST && SMTP_USER && SMTP_PASS);
-}
-
-let transporter;
-function getTransporter() {
-  if (!transporter) {
-    transporter = nodemailer.createTransport({
-      host: SMTP_HOST,
-      port: SMTP_PORT ,
-      secure: SMTP_PORT === 465,
-      auth: { user: SMTP_USER, pass: SMTP_PASS },
-      // Without these, an unreachable/slow host hangs on Nodemailer's
-      // defaults (multiple minutes) — and since password-reset awaits the
-      // send directly in the request handler, that would hang the HTTP
-      // response too. Fail fast instead.
-      connectionTimeout: 8000,
-      greetingTimeout: 8000,
-      socketTimeout: 10000,
-    });
-  }
-  return transporter;
+  return Boolean(BREVO_API_KEY && EMAIL_FROM);
 }
 
 function getDefaultFrom() {
-  return EMAIL_FROM || `"Stampworks" <${SMTP_USER}>`;
+  return {
+    email: EMAIL_FROM || 'onboarding@yourdomain.com',
+    name: EMAIL_FROM_NAME || 'Stampworks',
+  };
 }
 
-// Call once at server boot (see server.js). Purely diagnostic — logs
-// whether SMTP is reachable so misconfiguration is visible immediately
-// instead of surfacing as "nobody got an email" days later. Never called
-// again per-send: if verification passes at boot, subsequent sends just
-// attempt sendMail() directly and report their own success/failure —
-// re-verifying on every send would make a failing SMTP host slower with
-// every attempt instead of failing fast.
+// Call once at server boot. Brevo has no persistent connection to verify
+// like SMTP does, so this checks the API key is valid via a cheap,
+// harmless account-info call.
 async function verifyConnection() {
   if (!isConfigured()) {
-    console.log('[Mail] No SMTP configured — sends will be logged to console only.');
+    console.log('[Mail] No BREVO_API_KEY/EMAIL_FROM configured — sends will be logged to console only.');
     return { ok: false, reason: 'not_configured' };
   }
   try {
-    await getTransporter().verify();
-    console.log(`[Mail] SMTP connection verified (${SMTP_HOST}:${SMTP_PORT}, user: ${SMTP_USER}). Ready to send.`);
+    const { data } = await axios.get('https://api.brevo.com/v3/account', {
+      headers: { 'api-key': BREVO_API_KEY },
+    });
+    console.log(`[Mail] Brevo API key verified (account: ${data.email}). Sending from: ${getDefaultFrom().email}`);
     return { ok: true };
   } catch (err) {
-    console.error(`[Mail] SMTP connection FAILED (${SMTP_HOST}:${SMTP_PORT || 587}, user: ${SMTP_USER}).`);
-    console.error(`[Mail] Reason: ${err.message}`);
-    console.error('[Mail] Emails will fail to send until this is fixed. Common causes: wrong password/app-password, wrong port, unverified sender/domain with your provider, or the host blocking the connection.');
-    return { ok: false, reason: err.message };
+    const reason = err.response?.data?.message || err.message;
+    console.error('[Mail] Brevo verification FAILED.');
+    console.error(`[Mail] Reason: ${reason}`);
+    console.error('[Mail] Emails will fail to send until this is fixed. Common causes: invalid API key, or sender not verified.');
+    return { ok: false, reason };
   }
 }
 
-module.exports = { isConfigured, getTransporter, getDefaultFrom, verifyConnection };
+async function sendMail({ to, subject, html, text, from }) {
+  if (!isConfigured()) {
+    console.log(`[Mail] (not configured) Would send to ${to}: "${subject}"`);
+    return { ok: false, reason: 'not_configured' };
+  }
+  try {
+    const { data } = await axios.post(
+      BREVO_API_URL,
+      {
+        sender: from || getDefaultFrom(),
+        to: [{ email: to }],
+        subject,
+        htmlContent: html,
+        textContent: text,
+      },
+      {
+        headers: {
+          'api-key': BREVO_API_KEY,
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+      }
+    );
+    return { ok: true, messageId: data.messageId };
+  } catch (err) {
+    const reason = err.response?.data?.message || err.message;
+    console.error(`[Mail] Failed to send to ${to}:`, reason);
+    return { ok: false, reason };
+  }
+}
+
+module.exports = { isConfigured, getDefaultFrom, verifyConnection, sendMail };

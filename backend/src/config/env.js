@@ -12,11 +12,9 @@ const env = {
   JWT_SECRET: process.env.JWT_SECRET,
   JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN,
   CLIENT_ORIGIN: process.env.CLIENT_ORIGIN,
-  SMTP_HOST: process.env.SMTP_HOST,
-  SMTP_PORT: Number(process.env.SMTP_PORT),
-  SMTP_USER: process.env.SMTP_USER,
-  SMTP_PASS: process.env.SMTP_PASS,
+  BREVO_API_KEY: process.env.BREVO_API_KEY,
   EMAIL_FROM: process.env.EMAIL_FROM,
+  EMAIL_FROM_NAME: process.env.EMAIL_FROM_NAME,
 };
 
 module.exports = env;
