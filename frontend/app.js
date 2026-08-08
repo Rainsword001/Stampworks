@@ -387,7 +387,7 @@ function renderAuthModal(mode){
         ${isLogin ? `New here? <span class="link-btn" id="switchAuth" style="display:inline;">Create an account</span>`
                    : `Already have an account? <span class="link-btn" id="switchAuth" style="display:inline;">Log in</span>`}
       </div>
-      ${isLogin ? `<p style="font-family:'JetBrains Mono';font-size:11px;color:var(--paper-text);margin-top:14px;">Demo login: customer@demo.com / password123</p>` : ''}
+      ${isLogin ? `<p style="font-family:'JetBrains Mono';font-size:11px;color:var(--paper-text);margin-top:14px;"></p>` : ''}
     </div>
   </div>`;
 }
