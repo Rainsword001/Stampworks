@@ -1,94 +1,452 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Stampworks — Find Local Trade</title>
-<link rel="icon" href="./image/faveicon.png" type="image/x-icon">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Work+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Stampworks — Find Skilled Hands Near You</title>
+
+  <meta
+    name="description"
+    content="Stampworks helps you discover trusted local artisans, explore their work and book skilled professionals near you."
+  >
+
+  <link rel="icon" href="./image/faveicon.png" type="image/x-icon">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Oswald:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-<div class="wrap">
-  <header>
-    <div class="brand">
-      <svg class="brand-mark" viewBox="0 0 48 48">
-        <circle cx="24" cy="24" r="22" fill="none" stroke="#C17A3D" stroke-width="2"/>
-        <circle cx="24" cy="24" r="16" fill="none" stroke="#5C8A7A" stroke-width="1" stroke-dasharray="2 3"/>
-        <text x="24" y="30" text-anchor="middle" font-family="Oswald" font-weight="700" font-size="18" fill="#ECE7DB">S</text>
-      </svg>
-      <div>
-        <h1>Stampworks</h1>
-        <div class="tagline">Verified local trade, by the neighborhood</div>
-      </div>
-    </div>
 
-    <div class="header-right">
-      <nav id="mainNav">
-        <button class="active" data-tab="browse">Browse</button>
-        <button data-tab="list">List Your Trade</button>
-        <button data-tab="bookings">My Bookings</button>
+  <div class="site-shell">
+
+    <!-- =====================================================
+         NAVIGATION
+    ====================================================== -->
+
+    <header class="landing-header">
+
+      <a href="#" class="brand">
+
+        <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true">
+          <circle cx="24" cy="24" r="22" fill="none" stroke="#C17A3D" stroke-width="2"/>
+          <circle cx="24" cy="24" r="16" fill="none" stroke="#5C8A7A" stroke-width="1" stroke-dasharray="2 3"/>
+          <text x="24" y="30" text-anchor="middle" font-family="Oswald" font-weight="700" font-size="18" fill="#ECE7DB">S</text>
+        </svg>
+
+        <span class="brand-name">Stampworks</span>
+
+      </a>
+
+      <nav class="landing-nav">
+        <a href="#explore">Explore</a>
+        <a href="#how-it-works">How it works</a>
+        <a href="#artisans">For artisans</a>
       </nav>
-      <div id="authArea"></div>
-    </div>
-  </header>
 
-  <!-- Hero Landing Section (Visible on Browse tab) -->
-  <section class="landing-hero" id="landingHero">
-    <div class="hero-content">
-      <span class="hero-badge">Verified Local Skilled Labor</span>
-      <h2 class="hero-title">Hire Trusted Artisans & Tradespeople Near You</h2>
-      <p class="hero-subtitle">Connect directly with vetted plumbers, electricians, carpenters, and repair specialists across Nigeria without the middleman hassle.</p>
-      
-      <div class="hero-stats">
-        <div class="stat-pill"><strong>36+</strong> States Covered</div>
-        <div class="stat-pill"><strong>100%</strong> Verified Direct Contact</div>
-        <div class="stat-pill"><strong>8+</strong> Trade Specialties</div>
+      <div class="nav-actions">
+        <!-- Dynamic login state renders here (app.js) instead of a static Sign in link -->
+        <div id="authArea"></div>
+        <a href="#app" class="nav-cta" data-scroll-tab="browse">Find an artisan</a>
       </div>
-    </div>
-  </section>
 
-  <!-- How It Works Banner (Visible on Browse tab) -->
-  <section class="how-it-works" id="howItWorksSection">
-    <div class="section-title">How Stampworks Works</div>
-    <div class="steps-grid">
-      <div class="step-card">
-        <div class="step-num">01</div>
-        <h4>Search & Filter</h4>
-        <p>Find qualified artisans by trade, state, city, or neighborhood.</p>
+    </header>
+
+
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
+
+    <main>
+
+      <section class="hero">
+
+        <div class="hero-content">
+
+          <div class="eyebrow">
+            <span class="eyebrow-dot"></span>
+            LOCAL SKILLS. REAL PEOPLE.
+          </div>
+
+          <h1>
+            Great work
+            <span>starts with</span>
+            the right hands.
+          </h1>
+
+          <p class="hero-description">
+            Discover skilled artisans around you, explore their work,
+            and connect with people who know how to get the job done.
+          </p>
+
+          <div class="hero-search">
+            <div class="search-field">
+              <span class="search-icon">⌕</span>
+              <div>
+                <label for="heroSearch">What do you need?</label>
+                <input id="heroSearch" type="text" placeholder="e.g. Tailor, carpenter, electrician...">
+              </div>
+            </div>
+
+            <div class="search-location">
+              <span class="location-icon">⌖</span>
+              <div>
+                <small>LOCATION</small>
+                <strong>Anywhere</strong>
+              </div>
+            </div>
+
+            <button class="search-button" type="button" id="heroSearchBtn">Search</button>
+          </div>
+
+          <div class="popular-searches">
+            <span>Popular:</span>
+            <a href="#app" data-quick-search="Tailor">Tailors</a>
+            <a href="#app" data-quick-trade="Carpentry">Carpenters</a>
+            <a href="#app" data-quick-trade="Electrical">Electricians</a>
+            <a href="#app" data-quick-trade="Painting">Painters</a>
+          </div>
+
+        </div>
+
+
+        <!-- Hero visual -->
+        <div class="hero-visual">
+
+          <div class="hero-image-card">
+
+            <img src="./image/Artisan.png" alt="Skilled artisan at work" onerror="this.style.display='none'">
+
+            <div class="image-overlay"></div>
+
+            <div class="hero-stamp">
+              <span>STW</span>
+              <small>VERIFIED</small>
+            </div>
+
+            <div class="artisan-float-card">
+              <div class="artisan-avatar">A</div>
+              <div class="artisan-info">
+                <strong>Verified Artisan</strong>
+                <span>Skilled &amp; trusted</span>
+              </div>
+              <div class="verified-check">✓</div>
+            </div>
+
+            <div class="work-count">
+              <strong>1,000+</strong>
+              <span>skilled hands</span>
+            </div>
+
+          </div>
+
+          <div class="decorative-circle"></div>
+          <div class="vertical-label">CRAFT • CONNECT • CREATE</div>
+
+        </div>
+
+      </section>
+
+
+      <!-- =====================================================
+           TRUST STRIP
+      ====================================================== -->
+
+      <section class="trust-strip">
+        <div class="trust-item"><strong>01</strong><span>Discover local talent</span></div>
+        <div class="trust-line"></div>
+        <div class="trust-item"><strong>02</strong><span>View real profiles</span></div>
+        <div class="trust-line"></div>
+        <div class="trust-item"><strong>03</strong><span>Book with confidence</span></div>
+        <div class="trust-line"></div>
+        <div class="trust-item"><strong>04</strong><span>Get the job done</span></div>
+      </section>
+
+
+      <!-- =====================================================
+           EXPLORE CATEGORIES
+      ====================================================== -->
+
+      <section class="section" id="explore">
+
+        <div class="section-heading">
+          <div>
+            <span class="section-kicker">EXPLORE THE CRAFT</span>
+            <h2>Find the skill <span>you need.</span></h2>
+          </div>
+          <a href="#app" class="text-link" data-scroll-tab="browse">View all trades →</a>
+        </div>
+
+        <div class="category-grid">
+
+          <a href="#app" class="category-card category-large" data-quick-search="Tailor">
+            <span class="category-number">01</span>
+            <div class="category-icon">✂</div>
+            <h3>Fashion &amp; Tailoring</h3>
+            <p>Custom clothing, alterations and traditional designs.</p>
+            <span class="category-arrow">↗</span>
+          </a>
+
+          <a href="#app" class="category-card" data-quick-trade="Carpentry">
+            <span class="category-number">02</span>
+            <div class="category-icon">⌂</div>
+            <h3>Carpentry</h3>
+            <p>Furniture, repairs and custom woodwork.</p>
+            <span class="category-arrow">↗</span>
+          </a>
+
+          <a href="#app" class="category-card" data-quick-trade="Electrical">
+            <span class="category-number">03</span>
+            <div class="category-icon">⚡</div>
+            <h3>Electrical</h3>
+            <p>Reliable electrical installation and repairs.</p>
+            <span class="category-arrow">↗</span>
+          </a>
+
+          <a href="#app" class="category-card" data-quick-trade="Painting">
+            <span class="category-number">04</span>
+            <div class="category-icon">◒</div>
+            <h3>Painting</h3>
+            <p>Transform spaces with professional finishing.</p>
+            <span class="category-arrow">↗</span>
+          </a>
+
+          <a href="#app" class="category-card" data-quick-search="Beauty">
+            <span class="category-number">05</span>
+            <div class="category-icon">✦</div>
+            <h3>Beauty</h3>
+            <p>Hair, makeup, styling and personal care.</p>
+            <span class="category-arrow">↗</span>
+          </a>
+
+          <a href="#app" class="category-card" data-scroll-tab="browse">
+            <span class="category-number">06</span>
+            <div class="category-icon">+</div>
+            <h3>More trades</h3>
+            <p>Explore skilled professionals across your area.</p>
+            <span class="category-arrow">↗</span>
+          </a>
+
+        </div>
+
+      </section>
+
+
+      <!-- =====================================================
+           ARTISANS
+      ====================================================== -->
+
+      <section class="section artisans-section" id="artisans">
+
+        <div class="section-heading">
+          <div>
+            <span class="section-kicker">THE HANDS BEHIND THE WORK</span>
+            <h2>Meet skilled <span>people.</span></h2>
+          </div>
+          <p class="section-description">
+            Real people. Real skills. Real work.
+            Discover artisans and see what they can do before you book.
+          </p>
+        </div>
+
+        <div class="artisan-grid">
+
+          <article class="artisan-card">
+            <div class="artisan-photo">
+              <div class="photo-placeholder"><span>01</span></div>
+              <span class="verified-badge">✓ VERIFIED</span>
+            </div>
+            <div class="artisan-card-body">
+              <div class="artisan-card-top">
+                <div><h3>Local Artisan</h3><span class="artisan-trade">FASHION &amp; TAILORING</span></div>
+                <span class="rating">★ 4.9</span>
+              </div>
+              <p class="artisan-location">⌖ Your neighbourhood</p>
+              <div class="artisan-footer">
+                <span>Available for booking</span>
+                <a href="#app" data-scroll-tab="browse">View profile →</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="artisan-card featured-artisan">
+            <div class="artisan-photo">
+              <div class="photo-placeholder second"><span>02</span></div>
+              <span class="verified-badge">✓ VERIFIED</span>
+            </div>
+            <div class="artisan-card-body">
+              <div class="artisan-card-top">
+                <div><h3>Skilled Craftsman</h3><span class="artisan-trade">CARPENTRY</span></div>
+                <span class="rating">★ 4.8</span>
+              </div>
+              <p class="artisan-location">⌖ Your neighbourhood</p>
+              <div class="artisan-footer">
+                <span>Available for booking</span>
+                <a href="#app" data-scroll-tab="browse">View profile →</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="artisan-card">
+            <div class="artisan-photo">
+              <div class="photo-placeholder third"><span>03</span></div>
+              <span class="verified-badge">✓ VERIFIED</span>
+            </div>
+            <div class="artisan-card-body">
+              <div class="artisan-card-top">
+                <div><h3>Local Professional</h3><span class="artisan-trade">ELECTRICAL</span></div>
+                <span class="rating">★ 5.0</span>
+              </div>
+              <p class="artisan-location">⌖ Your neighbourhood</p>
+              <div class="artisan-footer">
+                <span>Available for booking</span>
+                <a href="#app" data-scroll-tab="browse">View profile →</a>
+              </div>
+            </div>
+          </article>
+
+        </div>
+
+      </section>
+
+
+      <!-- =====================================================
+           HOW IT WORKS
+      ====================================================== -->
+
+      <section class="process-section" id="how-it-works">
+
+        <div class="process-intro">
+          <span class="section-kicker">SIMPLE BY DESIGN</span>
+          <h2>From search <span>to done.</span></h2>
+          <p>Stampworks removes the guesswork from finding skilled professionals. Search, compare, connect and book.</p>
+        </div>
+
+        <div class="process-list">
+          <div class="process-step">
+            <span class="process-number">01</span>
+            <div><h3>Discover</h3><p>Search for the exact trade or service you need.</p></div>
+          </div>
+          <div class="process-step">
+            <span class="process-number">02</span>
+            <div><h3>Explore</h3><p>Browse profiles, experience, location and reviews.</p></div>
+          </div>
+          <div class="process-step">
+            <span class="process-number">03</span>
+            <div><h3>Connect</h3><p>Send a booking request directly to your chosen artisan.</p></div>
+          </div>
+          <div class="process-step">
+            <span class="process-number">04</span>
+            <div><h3>Get it done</h3><p>Work with the professional and get your project moving.</p></div>
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- =====================================================
+           FOR ARTISANS
+      ====================================================== -->
+
+      <section class="artisan-cta">
+        <div class="cta-pattern"></div>
+        <div class="cta-content">
+          <span class="section-kicker">FOR SKILLED PROFESSIONALS</span>
+          <h2>Your skill deserves <span>to be discovered.</span></h2>
+          <p>Create your Stampworks profile, showcase your craft, receive booking requests and connect with people looking for exactly what you do.</p>
+          <a href="#app" class="primary-cta" data-scroll-tab="list">List your trade <span>→</span></a>
+        </div>
+        <div class="cta-stamp"><span>STAMP</span><strong>YOUR</strong><span>CRAFT</span></div>
+      </section>
+
+
+      <!-- =====================================================
+           FINAL CTA
+      ====================================================== -->
+
+      <section class="final-cta">
+        <span class="section-kicker">STAMPWORKS</span>
+        <h2>The right hands <span>are closer than you think.</span></h2>
+        <p>Find trusted local talent and bring your next idea to life.</p>
+        <a href="#app" class="primary-cta" data-scroll-tab="browse">Explore artisans <span>→</span></a>
+      </section>
+
+
+      <!-- =====================================================
+           EXISTING APPLICATION
+      ====================================================== -->
+
+      <section id="app" class="application-section">
+
+        <div class="application-heading">
+          <span class="section-kicker">STAMPWORKS DIRECTORY</span>
+          <h2>Find your <span>artisan.</span></h2>
+        </div>
+
+        <!-- Tab nav app.js expects at #mainNav -->
+        <nav id="mainNav" class="app-tabs">
+          <button class="active" data-tab="browse">Browse</button>
+          <button data-tab="list">List Your Trade</button>
+          <button data-tab="bookings">My Bookings</button>
+        </nav>
+
+        <div class="app-container">
+          <!-- app.js mounts here (note: id="appMount", not id="app" — -->
+          <!-- the section above already owns id="app" for #app anchor links) -->
+          <div id="appMount"><div class="app-loading">Loading the ledger…</div></div>
+        </div>
+
+      </section>
+
+    </main>
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    <footer>
+
+      <div class="footer-brand">
+        <div class="brand">
+          <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true">
+            <circle cx="24" cy="24" r="22" fill="none" stroke="#C17A3D" stroke-width="2"/>
+            <circle cx="24" cy="24" r="16" fill="none" stroke="#5C8A7A" stroke-width="1" stroke-dasharray="2 3"/>
+            <text x="24" y="30" text-anchor="middle" font-family="Oswald" font-weight="700" font-size="18" fill="#ECE7DB">S</text>
+          </svg>
+          <span class="brand-name">Stampworks</span>
+        </div>
+        <p>Connecting people with skilled local talent.</p>
       </div>
-      <div class="step-card">
-        <div class="step-num">02</div>
-        <h4>Send Booking Request</h4>
-        <p>Describe your job details and preferred date directly to the tradesperson.</p>
+
+      <div class="footer-links">
+        <a href="#explore">Explore</a>
+        <a href="#how-it-works">How it works</a>
+        <a href="#artisans">For artisans</a>
       </div>
-      <div class="step-card">
-        <div class="step-num">03</div>
-        <h4>Connect & Rate</h4>
-        <p>Unlock phone contacts upon acceptance and leave verified job reviews.</p>
+
+      <div class="footer-bottom">
+        <span>© 2026 Stampworks</span>
+        <span>Built for local craftsmanship.</span>
       </div>
-    </div>
-  </section>
+
+    </footer>
+
+  </div>
 
 
-  <div id="app"><div class="loading">Loading the ledger…</div></div>
+  <div id="modalRoot"></div>
+  <div id="noticeRoot"></div>
 
-  <!-- Standard Footer -->
-  <footer class="site-footer">
-    <div class="footer-brand">
-      <h3>Stampworks</h3>
-      <p>Empowering local trade and trusted craftsmanship across all 36 states and the FCT.</p>
-    </div>
-    <div class="footer-links">
-      <span class="copyright">© 2026 Stampworks. Built for local trade integrity.</span>
-    </div>
-  </footer>
-</div>
+  <script src="app.js"></script>
 
-<div id="modalRoot"></div>
-<div id="noticeRoot"></div>
-
-<script src="app.js"></script>
 </body>
 </html>

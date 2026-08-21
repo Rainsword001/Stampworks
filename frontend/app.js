@@ -1,7 +1,6 @@
-const API_BASE = '/api'; // same-origin: Express serves this file and the API together
+const API_BASE = '/api';
 
 const TRADES = ["Plumbing","Electrical","Carpentry","Masonry","Painting","Welding","Roofing","Landscaping"];
-
 const STATES = [
   'Abia','Adamawa','Akwa Ibom','Anambra','Bauchi','Bayelsa','Benue','Borno',
   'Cross River','Delta','Ebonyi','Edo','Ekiti','Enugu','FCT','Gombe','Imo',
@@ -17,17 +16,16 @@ let state = {
   stateFilter: 'All',
   cityFilter: '',
   sort: 'rating',
-  modal: null,        // { type: 'profile', id } | { type: 'login' } | { type: 'signup' } | { type: 'forgot' } | { type: 'reset', token }
+  modal: null,
   profileArtisan: null,
   profileReviews: [],
   bookings: [],
   receivedBookings: [],
-  myListing: null,
   loaded: false,
   authError: '',
   authMessage: '',
-  ratingDrafts: {}, // { [bookingId]: { rating, comment } } — in-progress review inputs
-  notice: null,      // { type: 'success'|'error', title, message } — response modal, independent of state.modal
+  ratingDrafts: {},
+  notice: null,
 };
 
 function getToken(){ return localStorage.getItem('sw_token'); }
@@ -39,13 +37,12 @@ async function api(path, options = {}) {
   const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
   const token = getToken();
   if (token) headers['Authorization'] = `Bearer ${token}`;
-
   const res = await fetch(API_BASE + path, { ...options, headers });
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
     const err = new Error(data.message || `Request failed (${res.status})`);
     err.status = res.status;
-    err.data = data; // preserve extra fields the backend sent (e.g. needsVerification, email)
+    err.data = data;
     throw err;
   }
   return data;
@@ -107,7 +104,7 @@ async function loadReceivedBookings(){
     const res = await api('/bookings/received');
     state.receivedBookings = res.data;
   } catch(e) {
-    state.receivedBookings = []; // no listing yet
+    state.receivedBookings = [];
   }
 }
 
@@ -115,7 +112,7 @@ async function loadReceivedBookings(){
 
 function render(){
   renderAuthArea();
-  const app = document.getElementById('app');
+  const app = document.getElementById('appMount');
   if (!state.loaded){ app.innerHTML = '<div class="loading">Loading the ledger…</div>'; return; }
 
   if (state.tab === 'browse') app.innerHTML = renderBrowse();
@@ -154,6 +151,7 @@ function closeNotice(){ state.notice = null; renderNotice(); }
 function renderAuthArea(){
   const user = getUser();
   const el = document.getElementById('authArea');
+  if (!el) return;
   if (user) {
     el.innerHTML = `<span class="who">Signed in as <b>${escapeHtml(user.name)}</b> (${user.role})</span><button class="link-btn" id="logoutBtn">Log out</button>`;
     document.getElementById('logoutBtn').onclick = () => { clearSession(); state.tab='browse'; init(); };
@@ -191,7 +189,7 @@ function renderBrowse(){
           <div class="card-top">
             <div>
               <div class="card-name">${escapeHtml(a.name)}</div>
-              <div class="card-trade">${a.trade}</div>
+              <div class="card-trade">${escapeHtml(a.trade)}</div>
               <div class="card-loc">${escapeHtml(a.area)}, ${escapeHtml(a.city)}, ${escapeHtml(a.state)}</div>
             </div>
             <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
@@ -266,7 +264,7 @@ function renderBookings(){
         return `
         <div class="req-card">
           <div class="rname"><span>${escapeHtml(b.Artisan?.name || 'Artisan')}</span><span class="status-tag ${statusClass(b.status)}">${b.status}</span></div>
-          <div class="rtrade">${b.Artisan?.trade || ''} · ${b.Artisan?.area || ''}</div>
+          <div class="rtrade">${escapeHtml(b.Artisan?.trade || '')} · ${escapeHtml(b.Artisan?.area || '')}</div>
           <div class="rmsg">${escapeHtml(b.message)}</div>
           <div class="rmeta">Sent ${new Date(b.createdAt).toLocaleString()}${b.preferredDate ? ` · Preferred: ${b.preferredDate}` : ''}</div>
           ${b.status === 'completed' ? (
@@ -282,7 +280,6 @@ function renderBookings(){
                 ${starPicker(b.id, draft.rating)}
                 <textarea data-comment-for="${b.id}" rows="2" placeholder="Optional comment">${escapeHtml(draft.comment)}</textarea>
                 <button class="btn secondary" data-submit-review="${b.id}" ${draft.rating === 0 ? 'disabled' : ''}>Submit rating</button>
-                <div class="form-msg" data-review-msg="${b.id}"></div>
               </div>
             `
           ) : ''}
@@ -387,7 +384,7 @@ function renderAuthModal(mode){
         ${isLogin ? `New here? <span class="link-btn" id="switchAuth" style="display:inline;">Create an account</span>`
                    : `Already have an account? <span class="link-btn" id="switchAuth" style="display:inline;">Log in</span>`}
       </div>
-      ${isLogin ? `<p style="font-family:'JetBrains Mono';font-size:11px;color:var(--paper-text);margin-top:14px;"></p>` : ''}
+      ${isLogin ? `<p style="font-family:'JetBrains Mono';font-size:11px;color:var(--paper-text);margin-top:14px;">Demo login: customer@demo.com / password123</p>` : ''}
     </div>
   </div>`;
 }
@@ -458,7 +455,7 @@ function renderProfileModal(a){
         ${a.verified ? stampSvg(a.name.charAt(0)) : ''}
         <div>
           <h2>${escapeHtml(a.name)}</h2>
-          <div class="modal-trade">${a.trade} · ${escapeHtml(a.area)}, ${escapeHtml(a.city)}, ${escapeHtml(a.state)}</div>
+          <div class="modal-trade">${escapeHtml(a.trade)} · ${escapeHtml(a.area)}, ${escapeHtml(a.city)}, ${escapeHtml(a.state)}</div>
         </div>
       </div>
       <p class="modal-bio">${escapeHtml(a.bio)}</p>
@@ -714,7 +711,6 @@ function attachAuthModalHandlers(mode){
         const phone = document.getElementById('auth-phone').value.trim();
         const role = document.getElementById('auth-role').value;
         await api('/auth/signup', { method:'POST', body: JSON.stringify({ name, email, phone, password, role }) });
-        // Account created but not usable yet — collect the OTP before granting a session.
         state.modal = { type: 'verify', email };
         state.authError = '';
         render();
@@ -826,7 +822,7 @@ async function init(){
   const urlToken = new URLSearchParams(window.location.search).get('token');
   if (urlToken) {
     state.modal = { type: 'reset', token: urlToken };
-    window.history.replaceState({}, '', window.location.pathname); // scrub token from the visible URL
+    window.history.replaceState({}, '', window.location.pathname);
   }
 
   state.loaded = true;
@@ -834,3 +830,72 @@ async function init(){
 }
 
 init();
+
+/* =====================================================
+   LANDING PAGE WIRING
+   Connects the marketing sections (hero search, popular
+   searches, category cards, CTAs) to the real app state
+   above, instead of leaving them as dead links.
+===================================================== */
+
+function scrollToApp(){
+  document.getElementById('app')?.scrollIntoView({ behavior: 'smooth' });
+}
+
+function goToTab(tabName){
+  state.tab = tabName;
+  document.querySelectorAll('#mainNav button').forEach(b => b.classList.toggle('active', b.dataset.tab === tabName));
+  render();
+}
+
+async function runSearch({ search, trade }){
+  if (search !== undefined) state.search = search;
+  if (trade !== undefined) state.tradeFilter = trade;
+  goToTab('browse');
+  await loadArtisans();
+  render();
+  scrollToApp();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Generic "just take me to a tab" links/buttons
+  document.querySelectorAll('[data-scroll-tab]').forEach(el => {
+    el.addEventListener('click', (e) => {
+      e.preventDefault();
+      goToTab(el.dataset.scrollTab);
+      scrollToApp();
+    });
+  });
+
+  // Category cards / popular searches that filter by an exact known trade
+  document.querySelectorAll('[data-quick-trade]').forEach(el => {
+    el.addEventListener('click', (e) => {
+      e.preventDefault();
+      runSearch({ trade: el.dataset.quickTrade, search: '' });
+    });
+  });
+
+  // Category cards / popular searches that free-text search (e.g. "Tailor",
+  // which isn't in the fixed TRADES list but is findable via search since
+  // custom trades are indexed)
+  document.querySelectorAll('[data-quick-search]').forEach(el => {
+    el.addEventListener('click', (e) => {
+      e.preventDefault();
+      runSearch({ trade: 'All', search: el.dataset.quickSearch });
+    });
+  });
+
+  // Hero search box + button
+  const heroInput = document.getElementById('heroSearch');
+  const heroBtn = document.getElementById('heroSearchBtn');
+  if (heroBtn) {
+    heroBtn.addEventListener('click', () => {
+      runSearch({ trade: 'All', search: heroInput ? heroInput.value.trim() : '' });
+    });
+  }
+  if (heroInput) {
+    heroInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') { e.preventDefault(); heroBtn?.click(); }
+    });
+  }
+});
